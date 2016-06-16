@@ -1,0 +1,10 @@
+#results{
+  border: 1px solid black;
+  width: 200px;
+}
+#typing{
+  display: inline-block;
+  border: 1px solid black;
+  width: 100px;
+  height: 20px;
+}

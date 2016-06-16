@@ -1,0 +1,21 @@
+<div ng-controller="productController as PC">
+  <p ng-init="someVar1 = 'Favorite Food'">
+    {{someVar1}}: <input type="text" ng-model="PC.food" ng-keypress="PC.keyPress($event)">
+    <button type="button" ng-click="PC.addFood()">Add Food</button>
+    <input type="text" name="name" ng-model="filter_food" placeholder="filter...">
+  </p>
+  <p>
+    Currently Typing: <span id="typing" ng-bind='PC.food'></span>
+  </p>
+  <div ng-if="filter_food">
+    Using ng-if
+  </div>
+  <div id="results">
+    <p ng-repeat = 'food in PC.foods | filter:filter_food | orderBy:food'>
+      {{food}}
+    </p>
+  </div>
+  <div ng-show="PC.myBoolean" class="ng-hide">
+    Using ng-show/ng-hide
+  </div>
+</div>

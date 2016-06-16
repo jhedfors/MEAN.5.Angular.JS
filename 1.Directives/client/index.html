@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="stylesheet" href="/static/css/style.css" media="screen" title="no title" charset="utf-8">
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.5/angular.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.5/angular-route.min.js"></script>
+    <script type="text/javascript">
+      var myApp = angular.module('myApp', ['ngRoute'])
+      myApp.config(function($routeProvider){
+        $routeProvider
+          .when('/products',{
+              templateUrl:'static/partials/products.html'
+          })
+          .otherwise({
+              redirectTo: '/products'
+          });
+      })
+      //  build the controllers
+      myApp.controller('productController', function () {
+        this.myBoolean = true// comment out to hide
+        this.foods = ['nikkuman', 'spaghetti', 'pizza', 'yakiniku', 'tofu'];
+        this.addFood = function(){
+          console.log(this.food);
+          this.foods.push(this.food)
+          this.food = '';
+        }
+      });
+
+
+    </script>
+  </head>
+  <body>
+
+  <div ng-app='myApp'>
+    <div ng-view="">
+    </div>
+  </div>
+  </body>
+</html>
