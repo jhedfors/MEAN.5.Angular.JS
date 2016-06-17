@@ -39,7 +39,7 @@
         return factory
       })
       //build the controllers
-      myApp.controller('CustomizeUsersControllers',function(userFactory){
+      myApp.controller('CustomizeUsersControllers',function(userFactory,$location){
         var self = this
         self.users = []
         userFactory.getUsers(function(data){
@@ -48,6 +48,7 @@
         self.create = function(){
           userFactory.create(self.data)
           self.data = {}
+          $location.url('/list')
         }
         self.destroy = function(user){
           userFactory.destroy(user)
