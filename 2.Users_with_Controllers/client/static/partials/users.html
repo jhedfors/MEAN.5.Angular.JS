@@ -1,0 +1,48 @@
+<div ng-controller="userController as uc">
+  <fieldset>
+    <legend>Users Controller</legend>
+      <p>
+        <label>First Name: </label><input type="text" ng-model="uc.data.first_name" value="">
+      </p>
+      <p>
+        <label>Last Name: </label><input type="text" ng-model="uc.data.last_name" value="">
+      </p>
+      <p>
+        <label>Favorite: </label><input type="text" ng-model="uc.data.favorite_language" value="">
+      </p>
+      <button type="button" ng-click="uc.create()">Create User</button>
+    <table>
+      <thead>
+        <th>
+          First Name
+        </th>
+        <th>
+          Last Name
+        </th>
+        <th>
+          Fav Language
+        </th>
+        <th>
+          Actions
+        </th>
+      </thead>
+      <tbody>
+        <tr ng-repeat="user in uc.users">
+          <td>
+            {{user.first_name}}
+          </td>
+          <td>
+            {{user.last_name}}
+          </td>
+          <td>
+            {{user.favorite_language}}
+          </td>
+          <td>
+            <button type="button" ng-click="uc.destroy($index)">Delete User</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+  </fieldset>
+</div>

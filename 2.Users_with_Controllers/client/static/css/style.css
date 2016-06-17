@@ -1,0 +1,14 @@
+*{
+  /*background: red*/
+}
+
+label{
+  display: inline-block;
+  width: 100px;
+}
+input[type="text"] {
+  border: 1px solid black;
+}
+fieldset{
+  width: 400px;
+}
