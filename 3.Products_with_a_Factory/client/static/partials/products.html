@@ -1,0 +1,38 @@
+<div ng-controller="productController as pc">
+  <fieldset>
+    <legend>Products Controller</legend>
+    <p>
+      <label>Product Name:</label><input type="text" ng-model="pc.data.name">
+    </p>
+    <p>
+      <label>Product Price:</label><input type="text" ng-model="pc.data.price">
+    </p>
+    <button type="button" ng-click="pc.create()">Add Product</button>
+    <table>
+      <thead>
+        <th>
+          Name
+        </th>
+        <th>
+          Price
+        </th>
+        <th>
+          Actions
+        </th>
+      </thead>
+      <tbody>
+        <tr ng-repeat="product in pc.products">
+          <td>
+            {{product.name}}
+          </td>
+          <td>
+            {{product.price}}
+          </td>
+          <td>
+            <button type="button" ng-click="pc.destroy(product)">Delete Product</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </fieldset>
+</div>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="stylesheet" href="/static/css/style.css" media="screen" title="no title" charset="utf-8">
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.5/angular.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.5/angular-route.min.js"></script>
+    <script type="text/javascript">
+      var myApp = angular.module('myApp', ['ngRoute'])
+      myApp.config(function($routeProvider){
+        $routeProvider
+          .when('/products',{
+            templateUrl:'static/partials/products.html'
+          })
+          .otherwise({
+            redirectTo:'/products'
+          })
+      })
+      //build the factories
+      myApp.factory('productFactory',function(){
+        var products = [
+          {name:'Keyboard',price:149.99},
+          {name:'Mouse',price:59.99},
+          {name:'Basketball',price:59.99},
+        ]
+        var factory = {}
+        factory.getProducts = function(callback){
+          callback(products)
+        }
+        factory.create = function(data){
+          products.push(data)
+          data = {}
+        }
+        factory.destroy = function(product){
+          products.splice(products.indexOf(product),1)
+        }
+        return factory
+      })
+
+
+      //build the controllers
+      myApp.controller('productController',function(productFactory){
+        var self = this
+        self.products = []
+        productFactory.getProducts(function(data){
+          self.products = data
+        })
+        self.create = function(){
+          productFactory.create(self.data)
+          self.data = {}
+        }
+        // self.create = function(){
+        //   self.products.push(self.data)
+        //   self.data = {}
+        // }
+        self.destroy = function(product){
+          productFactory.destroy(product)
+        }
+      })
+
+    </script>
+  </head>
+  <body>
+    <div ng-app="myApp">
+      <div ng-view="">
+
+      </div>
+    </div>
+  </body>
+</html>
