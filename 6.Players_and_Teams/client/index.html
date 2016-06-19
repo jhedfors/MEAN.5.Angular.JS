@@ -13,6 +13,9 @@
           .when('/players',{
             templateUrl:'partials/players.html'
           })
+          .when('/team/:teamname',{
+            templateUrl:'partials/team.html'
+          })
           .when('/teams',{
             templateUrl:'partials/teams.html'
           })
@@ -101,6 +104,19 @@
             }
           }
         }
+        factory.getPlayers = function(teamname){
+          console.log(teamname, teams);
+          var team = []
+          for (var i = 0; i < teams.length; i++) {
+            if (teamname == teams[i].name) {
+              console.log('in teams', teams[i]);
+              team = teams[i]
+            }
+          }
+          console.log('team',team);
+          return team
+          team = []
+        }
         return factory
       })
       myApp.controller('playersController',function(playerFactory){
@@ -119,6 +135,13 @@
         self.destroy = function(player){
           playerFactory.destroy(player)
         }
+      })
+      myApp.controller('teamController',function(teamFactory,$routeParams){
+        var self = this
+        self.teamname = $routeParams.teamname
+        self.players = teamFactory.getPlayers($routeParams.teamname).players
+        console.log("PLAYERS", self.players);
+
       })
       myApp.controller('teamsController',function(teamFactory){
         var self = this

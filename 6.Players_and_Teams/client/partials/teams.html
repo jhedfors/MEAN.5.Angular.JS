@@ -16,7 +16,7 @@
   <tbody>
     <tr ng-repeat="team in tc.teams">
       <td>
-        {{team.name}}
+        <a href="#/team/{{team.name}}" ng-bind = "team.name"></a>
       </td>
       <td>
         <button type="button" ng-click="tc.destroy(team)">Remove Team</button>

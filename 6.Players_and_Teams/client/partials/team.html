@@ -1,0 +1,9 @@
+<div ng-controller="teamController as tmc">
+  <h1>{{tmc.teamname}}</h1>
+  <h4>Players:</h4>
+  <ul>
+    <li ng-repeat="player in tmc.players">
+      {{player}}
+    </li>
+  </ul>
+</div>
