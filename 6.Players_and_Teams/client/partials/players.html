@@ -1,0 +1,27 @@
+<div ng-controller="playersController as pc">
+  <p>
+    <label>Name: </label><input type="text" ng-model="pc.name" value="">
+  </p>
+  <button type="button" ng-click="pc.create()">Add Player</button>
+  <hr>
+<table>
+  <thead>
+    <th>
+      Name
+    </th>
+    <th>
+      Actions
+    </th>
+  </thead>
+  <tbody>
+    <tr ng-repeat="player in pc.players">
+      <td>
+        {{player.name}}
+      </td>
+      <td>
+        <button type="button" ng-click="pc.destroy(player)">Delete Player</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>

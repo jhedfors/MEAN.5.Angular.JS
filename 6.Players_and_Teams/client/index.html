@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="stylesheet" href="/css/style.css" media="screen" title="no title" charset="utf-8">
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.5/angular.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.5/angular-route.min.js"></script>
+    <script type="text/javascript">
+      var myApp = angular.module('myApp',['ngRoute'])
+      myApp.config(function($routeProvider){
+        $routeProvider
+          .when('/players',{
+            templateUrl:'partials/players.html'
+          })
+          .when('/teams',{
+            templateUrl:'partials/teams.html'
+          })
+          .when('/associations',{
+            templateUrl:'partials/associations.html'
+          })
+          .otherwise({
+            redirectTo:'/players'
+          })
+      })
+      myApp.factory('playerFactory',function(){
+        var players = [
+          {name:'Jeff',team:''},
+          {name:'Kazu',team:''},
+          {name:'Jayden',team:''},
+          {name:'Keefer',team:''}
+        ]
+        var factory = {}
+        //get players
+        factory.getPlayers = function(callback){
+          callback(players)
+        }
+        //create player
+        factory.create = function(name){
+          players.push({name:name})
+        }
+        //destroy player
+        factory.destroy = function(player){
+          players.splice(players.indexOf(player),1)
+        }
+        //create player/team association
+        factory.assign = function(player){
+          for (var i = 0; i < players.length; i++) {
+            if (players[i].name==player.player_name) {
+              players[i].team = player.team_name
+            }
+          }
+        }
+        factory.unassign = function(player){
+          for (var i = 0; i < players.length; i++) {
+            if (players[i].name==player.name) {
+              players[i].team = ''
+            }
+          }
+        }
+        return factory
+      })
+      myApp.factory('teamFactory',function(){
+        var teams = [
+          {name:'Iguanas',players:[]},
+          {name:'Puppies',players:[]},
+          {name:'Pimps',players:[]},
+          {name:'Crybabies',players:[]}
+        ]
+
+        var factory = {}
+        //get teams
+        factory.getTeams = function(callback){
+          callback(teams)
+        }
+        //create team
+        factory.create = function(name){
+          teams.push({name:name})
+        }
+        //destroy player
+        factory.destroy = function(team){
+          teams.splice(teams.indexOf(team),1)
+        }
+        //create player/team association
+        factory.assign = function(player){
+          console.log('teamfactory assign:',player);
+          for (var i = 0; i < teams.length; i++) {
+            if (teams[i].name == player.team_name) {
+              teams[i].players.push(player.player_name)
+            }
+          }
+        }
+        factory.unassign = function(player){
+          for (var i = 0; i < teams.length; i++) {
+            if (teams[i].name == player.team) {
+              for (var x = 0; x < teams[i].players.length; x++) {
+                if (teams[i].players[x]==player.name) {
+                  teams[i].players.splice(x,1)
+                }
+              }
+            }
+          }
+        }
+        return factory
+      })
+      myApp.controller('playersController',function(playerFactory){
+        // console.log(this);
+        var self = this
+        self.players = []
+        playerFactory.getPlayers(function(data){
+          self.players = data
+        })
+        // create player
+        self.create = function(){
+          playerFactory.create(this.name)
+          this.name = ''
+        }
+        //destroy player
+        self.destroy = function(player){
+          playerFactory.destroy(player)
+        }
+      })
+      myApp.controller('teamsController',function(teamFactory){
+        var self = this
+        self.teams = []
+        teamFactory.getTeams(function(data){
+          self.teams = data
+        })
+        // create team
+        self.create = function(){
+          teamFactory.create(this.name)
+          this.name = ''
+        }
+        //destroy team
+        self.destroy = function(team){
+          teamFactory.destroy(team)
+        }
+      })
+      myApp.controller('associationsController',function(playerFactory,teamFactory){
+        var self = this
+        self.teams = []
+        teamFactory.getTeams(function(teams){
+          self.teams = teams
+        })
+        self.players = []
+        playerFactory.getPlayers(function(players){
+          self.players = players
+        })
+        self.assign = function(){
+          teamFactory.assign(this)
+          playerFactory.assign(this)
+        }
+        self.unassign = function(player){
+          teamFactory.unassign(player)
+          playerFactory.unassign(player)
+        }
+      })
+    </script>
+  </head>
+  <body>
+    <div ng-app="myApp">
+      <a href="#/players">Players</a>    <a href="#/teams">Teams</a>    <a href="#/associations">Associations</a>
+      <div ng-view="">
+      </div>
+    </div>
+  </body>
+</html>
