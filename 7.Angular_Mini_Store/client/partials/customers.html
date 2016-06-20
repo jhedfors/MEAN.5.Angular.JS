@@ -1,12 +1,14 @@
 <div ng-controller="customersController as cc">
-  <h1>Add a New Customer</h1>
+  <h3>Add a new customer</h3>
   <form name="customerForm">
     <label>Customer Name:</label><input type="text" name="name" ng-model="cc.name" ng-minlength='2' required>
     <input type="submit" ng-click="cc.create()" value="Add">
   </form>
-  <div ng-messages="customerForm.name.$error">
-    <p ng-message="minlength">The player name is too short.</p>
-    <p ng-message="required">The player name is required.</p>
+  <div ng-show="customerForm.name.$valid && customerForm.name.$touched">
+    <div ng-messages="customerForm.name.$error">
+      <p ng-message="minlength">The player name is too short.</p>
+      <p ng-message="required">The player name is required.</p>
+    </div>
   </div>
   <div ng-messages="cc.serverErrors">
     <p ng-message="exists">Name already exists.</p>
@@ -31,7 +33,7 @@
         <td ng-bind="customer.created_at  | date : format : timezone">
         </td>
         <td>
-          <button type="button" name="button" ng-click="destroy($index)">Remove</button>
+          <button type="button" name="button" ng-click="cc.destroy(customer)">Remove</button>
         </td>
       </tr>
     </tbody>

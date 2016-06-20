@@ -29,7 +29,7 @@
           {name:'India Meisner', created_at:"March 15, 2014"},
         ]
         var factory = {}
-        factory.getCustomers = function(callback){
+        factory.index = function(callback){
           callback(customers)
         }
         factory.create = function(name){
@@ -38,16 +38,58 @@
               return 'exists'
             }
           }
-
           var today = new Date()
-          var new_customer = {name:name,created_at:today}
+          console.log(today);
+          console.log(Date.now());
+          var new_customer = {name:name,created_at:Date.now()}
           customers.push(new_customer)
+        }
+        factory.destroy = function(data){
+          console.log("destroy factory",data);
+          for (var i = 0; i < customers.length; i++) {
+            if (data.name == customers[i].name) {
+              customers.splice(i,1)
+            }
+          }
         }
         return factory
       })
+      myApp.factory('orderFactory', function(){
+        var orders = [
+          {customer_name:'Michael Choi', product:"Nike Shoes", quantity: 2, created_at:"April 3, 2014"},
+          {customer_name:'John Subsupin', product:"Black Belts", quantity: 3, created_at:"April 3, 2014"},
+          {customer_name:'Trey Villafane', product:"Ice Creams", quantity: 5, created_at:"April 1, 2014"},
+          {customer_name:'India Meisner', product:"Candies", quantity: 15, created_at:"March 15, 2014"},
+        ]
+        var factory = {}
+        factory.index = function(callback){
+          callback(orders)
+        }
+        factory.create = function(data){
+          console.log(data);
+          var today = new Date()
+          var new_order = {customer_name:data.customer_name, product:data.product_name, quantity: data.num, created_at:today}
+          orders.push(new_order)
+        }
+        return factory
+      })
+      myApp.factory('productFactory',function(){
+        var products = [
+          {name:'Nike Shoes'},
+          {name:'Black Belts'},
+          {name:'Ice Creams'},
+          {name:'Candies'},
+        ]
+        var factory = {}
+        factory.index = function(callback){
+          callback(products)
+        }
+        return factory
+      })
+
       myApp.controller('customersController',function(customerFactory){
         var self = this
-        customerFactory.getCustomers(function(data){
+        customerFactory.index(function(data){
           self.customers = data
         })
         self.create = function(){
@@ -61,13 +103,41 @@
             this.name = ''
           }
         }
+        self.destroy = function(data){
+          customerFactory.destroy(data)
+        }
         console.log(self.customers);
       })
+      myApp.controller('ordersController',function(customerFactory,orderFactory,productFactory){
+        var self = this
+        self.customers = []
+        self.orders = []
+        self.products = []
+        customerFactory.index(function(data){
+          self.customers = data
+        })
+        orderFactory.index(function(data){
+          self.orders = data
+        })
+        productFactory.index(function(data){
+          self.products = data
+        })
+        self.create = function(){
+          orderFactory.create(self.new)
+          self.new = ''
+        }
+        self.destroy = function(data){
+          customerFactory.destroy(data)
+        }
+        // console.log(self.customers);
+      })
+
 
     </script>
   </head>
   <body>
     <div ng-app="myApp">
+      <a href="#/orders">Orders</a> | <a href="#/customers">Customers</a>
       <div ng-view="">
 
       </div>
