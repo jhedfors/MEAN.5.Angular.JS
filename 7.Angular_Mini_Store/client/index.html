@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="stylesheet" href="/css/style.css" media="screen" title="no title" charset="utf-8">
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.5/angular.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.5/angular-route.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-messages.js"></script>
+    <script type="text/javascript">
+      var myApp = angular.module('myApp',['ngRoute','ngMessages'])
+      myApp.config(function($routeProvider){
+        $routeProvider
+          .when('/customers',{
+            templateUrl:'partials/customers.html'
+          })
+          .when('/orders',{
+            templateUrl:'partials/orders.html'
+          })
+          .otherwise({
+            redirectTo:'/customers'
+          })
+      })
+      myApp.factory('customerFactory', function(){
+        var customers = [
+          {name:'Michael Choi', created_at:"April 3, 2014"},
+          {name:'John Subsupin', created_at:"April 3, 2014"},
+          {name:'Trey Villafane', created_at:"April 1, 2014"},
+          {name:'India Meisner', created_at:"March 15, 2014"},
+        ]
+        var factory = {}
+        factory.getCustomers = function(callback){
+          callback(customers)
+        }
+        factory.create = function(name){
+          for (var i = 0; i < customers.length; i++) {
+            if (customers[i].name == name) {
+              return 'exists'
+            }
+          }
+
+          var today = new Date()
+          var new_customer = {name:name,created_at:today}
+          customers.push(new_customer)
+        }
+        return factory
+      })
+      myApp.controller('customersController',function(customerFactory){
+        var self = this
+        customerFactory.getCustomers(function(data){
+          self.customers = data
+        })
+        self.create = function(){
+          var self = this
+          self.serverErrors = ''
+          var add = customerFactory.create(self.name)
+          if (add == "exists") {
+            self.serverErrors = {exists:true}
+          }
+          else{
+            this.name = ''
+          }
+        }
+        console.log(self.customers);
+      })
+
+    </script>
+  </head>
+  <body>
+    <div ng-app="myApp">
+      <div ng-view="">
+
+      </div>
+
+    </div>
+
+  </body>
+</html>
