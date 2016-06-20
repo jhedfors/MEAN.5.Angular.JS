@@ -1,8 +1,13 @@
 <div ng-controller="playersController as pc">
-  <p>
-    <label>Name: </label><input type="text" ng-model="pc.name" value="">
-  </p>
-  <button type="button" ng-click="pc.create()">Add Player</button>
+  <h1>New Player</h1>
+  <form name="playerForm">
+    <label>Name: </label><input type="text" name="name" ng-model="pc.name" ng-minlength='4' required >
+    <button type="button" ng-click="pc.create()">Add Player</button>
+  </form>
+  <div ng-messages="playerForm.name.$error">
+      <p ng-message="minlength">The player name is too short.</p>
+      <p ng-message="required">The player name is required.</p>
+  </div>
   <hr>
 <table>
   <thead>
